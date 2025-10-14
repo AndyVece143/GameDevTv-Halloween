@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.Hierarchy;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,14 +13,21 @@ public class Player : MonoBehaviour
 
     public bool falling;
     public bool grounded;
+    public bool respawn;
+    private GameManager gameManager;
 
     public Animator anim;
+
+    public bool canMove = true;
+
+    
 
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
+        gameManager = GameManager.FindAnyObjectByType(typeof(GameManager)) as GameManager;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,11 +38,16 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
+        if (canMove)
+        {
+            Movement();
+        }
+        
     }
 
     private void Movement()
     {
+
         float horizontalInput = Input.GetAxis("Horizontal");
         body.linearVelocity = new Vector2(horizontalInput * speed, body.linearVelocity.y);
 
@@ -58,7 +72,7 @@ public class Player : MonoBehaviour
         {
             falling = true;
         }
-        else if (body.linearVelocity.y > 0)
+        else if (body.linearVelocity.y >= 0)
         {
             falling = false;
         }
@@ -81,4 +95,67 @@ public class Player : MonoBehaviour
         return raycastHit.collider != null;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Danger")
+        {
+            canMove = false;
+            body.linearVelocity = new Vector2(0, 0);
+            Death();
+            //Respawn();
+        }
+    }
+
+    private void Death()
+    {
+        canMove = false;
+        body.gravityScale = 0;
+        anim.SetBool("falling", false);
+        anim.SetTrigger("dead");
+        StartCoroutine(waiterDeath(1f));
+    }
+
+    private void Respawn(SpriteRenderer renderer, Color color)
+    {
+        renderer.color = color;
+        if (gameManager.activeCheckpoint == null)
+        {
+            body.transform.position = new Vector3(0, 0, 0);
+            canMove = true;
+            body.gravityScale = 2;
+        }
+        else
+        {
+            canMove = false;
+            body.gravityScale = 0;
+            anim.SetBool("falling", false);
+            anim.SetTrigger("respawn");
+            anim.Play("respawn");
+            Vector3 respawnPoint = gameManager.activeCheckpoint.transform.position;
+            body.transform.position = respawnPoint;
+            StartCoroutine(waiterRespawn());
+        }
+    }
+
+    IEnumerator waiterRespawn()
+    {
+        yield return new WaitForSeconds(0.5f);
+        canMove = true;
+        body.gravityScale = 2;
+    }
+
+    IEnumerator waiterDeath(float duration)
+    {
+        SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
+        Color startColor = renderer.color;
+        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0);
+        float time = 0;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            renderer.color = Color.Lerp(startColor, endColor, time / duration);
+            yield return null;
+        }
+        Respawn(renderer, startColor);
+    }
 }
