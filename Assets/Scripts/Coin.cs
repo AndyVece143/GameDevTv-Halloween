@@ -3,6 +3,7 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     private GameManager gameManager;
+    [SerializeField] private AudioClip pickUpSound;
 
     private void Start()
     {
@@ -12,6 +13,7 @@ public class Coin : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
+            SoundManager.instance.PlaySound(pickUpSound);
             gameManager.GainCoin();
             Destroy(gameObject);
         }

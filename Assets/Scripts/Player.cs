@@ -20,7 +20,8 @@ public class Player : MonoBehaviour
 
     public bool canMove = true;
 
-    
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip deathSound;
 
     private void Awake()
     {
@@ -88,6 +89,7 @@ public class Player : MonoBehaviour
         body.linearVelocity = new Vector2(body.linearVelocity.x, jumpForce);
         grounded = false;
         anim.SetTrigger("jump");
+        SoundManager.instance.PlaySound(jumpSound);
     }
     private bool isGrounded()
     {
@@ -112,6 +114,7 @@ public class Player : MonoBehaviour
         body.gravityScale = 0;
         anim.SetBool("falling", false);
         anim.SetTrigger("dead");
+        SoundManager.instance.PlaySound(deathSound);
         StartCoroutine(waiterDeath(1f));
     }
 
