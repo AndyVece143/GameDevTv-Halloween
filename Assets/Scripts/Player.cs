@@ -84,7 +84,7 @@ public class Player : MonoBehaviour
         anim.SetBool("falling", falling);
     }
 
-    private void Jump()
+    public void Jump()
     {
         body.linearVelocity = new Vector2(body.linearVelocity.x, jumpForce);
         grounded = false;
@@ -99,7 +99,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Danger")
+        if (collision.tag == "Danger" || collision.tag == "Enemy")
         {
             canMove = false;
             body.linearVelocity = new Vector2(0, 0);
@@ -112,6 +112,7 @@ public class Player : MonoBehaviour
     {
         canMove = false;
         body.gravityScale = 0;
+        boxCollider.enabled = false;
         anim.SetBool("falling", false);
         anim.SetTrigger("dead");
         SoundManager.instance.PlaySound(deathSound);
@@ -120,7 +121,9 @@ public class Player : MonoBehaviour
 
     private void Respawn(SpriteRenderer renderer, Color color)
     {
-        renderer.color = color;
+        //renderer.color = color;
+        renderer.color = new Color32(255, 255, 255, 255);
+        boxCollider.enabled = true;
         if (gameManager.activeCheckpoint == null)
         {
             body.transform.position = new Vector3(0, 0, 0);
@@ -151,6 +154,7 @@ public class Player : MonoBehaviour
     {
         SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
         Color startColor = renderer.color;
+        //Debug.Log(startColor);
         Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0);
         float time = 0;
         while (time < duration)
