@@ -23,6 +23,9 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip jumpSound;
     [SerializeField] private AudioClip deathSound;
 
+    public float lowerBounds;
+    public Vector3 initialRespawnPoint;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -78,6 +81,11 @@ public class Player : MonoBehaviour
             falling = false;
         }
 
+        if (transform.position.y <= lowerBounds)
+        {
+            Death();
+        }
+
         //Animation
         anim.SetBool("move", horizontalInput != 0);
         anim.SetBool("grounded", isGrounded());
@@ -126,7 +134,7 @@ public class Player : MonoBehaviour
         boxCollider.enabled = true;
         if (gameManager.activeCheckpoint == null)
         {
-            body.transform.position = new Vector3(0, 0, 0);
+            body.transform.position = initialRespawnPoint;
             canMove = true;
             body.gravityScale = 2;
         }

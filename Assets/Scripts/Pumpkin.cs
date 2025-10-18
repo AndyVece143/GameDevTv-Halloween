@@ -11,15 +11,19 @@ public class Pumpkin : MonoBehaviour
     public LayerMask groundLayer;
     public float raycastDistance;
     public float wallDistance;
+    private BoxCollider2D boxCollider;
 
     private bool facingRight = true;
     private Vector2 forwards;
     private bool canMove = true;
+    public BoxCollider2D playerCollision;
+    public BoxCollider2D weakpoint;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
     }
 
@@ -78,6 +82,11 @@ public class Pumpkin : MonoBehaviour
     public void Death()
     {
         canMove = false;
+        body.bodyType = RigidbodyType2D.Static;
+        body.gravityScale = 0;
+        boxCollider.enabled = false;
+        weakpoint.enabled = false;
+        playerCollision.enabled = false;
         anim.SetTrigger("dead");
         StartCoroutine(waiterDeath(1f));
     }
