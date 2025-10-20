@@ -115,6 +115,10 @@ public class Player : MonoBehaviour
             //Respawn();
         }
     }
+    public void StopMoving()
+    {
+        body.linearVelocity = new Vector2(0, 0);
+    }
 
     private void Death()
     {

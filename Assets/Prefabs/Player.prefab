@@ -83,7 +83,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 4
   m_Sprite: {fileID: 4334783836991956000, guid: e17de378337fe6846a8b366da0d7d944, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -215,6 +215,7 @@ MonoBehaviour:
   jumpSound: {fileID: 8300000, guid: db2d7ba122d87864dac8f91dcc5e2c93, type: 3}
   deathSound: {fileID: 8300000, guid: df787741fd64fd541a5d2ce0da74af4b, type: 3}
   lowerBounds: -5
+  initialRespawnPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &7581521897419833596
 GameObject:
   m_ObjectHideFlags: 0
