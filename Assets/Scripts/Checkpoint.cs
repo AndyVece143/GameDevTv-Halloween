@@ -10,6 +10,8 @@ public class Checkpoint : MonoBehaviour
     private bool active = false;
     public Animator anim;
 
+    [SerializeField] private AudioClip clickSound;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -49,6 +51,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (gameManager.coinAmount >= gameManager.checkpointCost)
         {
+            SoundManager.instance.PlaySound(clickSound);
             text.gameObject.SetActive(false);
             active = true;
             gameManager.coinAmount -= gameManager.checkpointCost;

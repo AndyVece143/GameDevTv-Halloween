@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
         //transform.position = new Vector3(player.position.x, player.position.y, transform.position.z);
         Vector3 targetPosition = player.position + offset;
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
-        if (transform.position.y <= -1)
+        if (transform.position.y <= lowerBounds)
         {
             transform.position = new Vector3(transform.position.x, lowerBounds, -10f);
         }

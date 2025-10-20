@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
 
     public void PlayButton()
     {
-        loader.LoadNextLevel("Level1");
+        loader.LoadNextLevel("Cutscene");
     }
 
     public void CreditsButton()

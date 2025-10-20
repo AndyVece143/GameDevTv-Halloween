@@ -41,11 +41,14 @@ public class PauseMenu : MonoBehaviour
     public void ResumeGame()
     {
         Debug.Log("Resuming");
+        Resume();
     }
 
     public void LoadMenu()
     {
         Debug.Log("Menu");
+        Resume();
+        loader.LoadNextLevel("Title");
     }
 
     public void RestartLevel()
